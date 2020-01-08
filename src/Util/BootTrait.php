@@ -240,4 +240,20 @@ trait BootTrait {
     return $boot_params;
   }
 
+  /**
+   * Append boot params to a command and then run it.
+   * 
+   * @param \Symfony\Component\Console\Input\InputInterface $input
+   * @param string $command
+   * @return string
+   */
+  protected function runCmdWithBootParams(InputInterface $input, $command) {
+    foreach (array('level', 'hostname', 'user') as $option) {
+      $optionValue = $input->getOption($option);
+      if (!empty($optionValue)) {
+        $command .= " --$option=$optionValue";
+      }
+    }
+    return \Civi\Cv\Util\Cv::run($command);
+  }
 }

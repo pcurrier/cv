@@ -1,6 +1,7 @@
 <?php
 namespace Civi\Cv\Command;
 
+use Civi\Cv\Util\BootTrait;
 use Civi\Cv\Util\StructuredOutputTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -13,6 +14,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
  */
 class UpgradeDlCommand extends BaseCommand {
 
+  use BootTrait;
   use StructuredOutputTrait;
 
   protected function configure() {
@@ -34,7 +36,7 @@ Returns a JSON object with the properties:
   extractedDir     The path to the extracted archive (not performed for Joomla)
   installedTo      The path to the `civicrm` directory of the file upgrade
 ');
-    // parent::configureBootOptions();
+    $this->configureBootOptions();
   }
 
   protected function execute(InputInterface $input, OutputInterface $output) {
@@ -47,7 +49,7 @@ Returns a JSON object with the properties:
       if (!empty($cms)) {
         $command .= " --cms=$cms";
       }
-      $dl = \Civi\Cv\Util\Cv::run($command);
+      $dl = $this->runCmdWithBootParams($input, $command);
       if (empty($dl['url'])) {
         $error = 'No URL available for downloading';
         $error .= empty($dl['error']) ? '.' : ": {$dl['error']}";
@@ -57,7 +59,7 @@ Returns a JSON object with the properties:
     }
 
     // Get information for where the site should go.
-    $vars = empty($dl['vars']) ? \Civi\Cv\Util\Cv::run('vars:show') : $dl['vars'];
+    $vars = empty($dl['vars']) ? $this->runCmdWithBootParams($input, 'vars:show') : $dl['vars'];
     if (empty($cms)) {
       $cms = $vars['CIVI_UF'];
     }
