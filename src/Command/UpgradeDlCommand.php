@@ -21,7 +21,7 @@ class UpgradeDlCommand extends BaseCommand {
       ->setDescription('Download CiviCRM code and put it in place for an upgrade')
       ->configureOutputOptions()
       ->addOption('stability', 's', InputOption::VALUE_REQUIRED, 'Specify the stability of the version to get (beta, rc, stable)', 'stable')
-      ->addOption('cms', 'c', InputOption::VALUE_REQUIRED, 'Specify the cms to get (Backdrop, Drupal, Drupal6, Joomla, Wordpress) instead of the current site')
+      ->addOption('cms', 'c', InputOption::VALUE_REQUIRED, 'Specify the cms to get (Backdrop, Drupal, Drupal6, Drupal8, Joomla, Wordpress) instead of the current site')
       ->addOption('url', 'u', InputOption::VALUE_REQUIRED, 'Specify the URL to a tarball/zipfile for downloading (regardless of --stability and --cms)')
       ->addOption('temploc', NULL, InputOption::VALUE_REQUIRED, 'Specify the location to put the temporary tarball', sys_get_temp_dir())
       ->setHelp('Download CiviCRM code and put it in place for an upgrade
@@ -85,6 +85,7 @@ Returns a JSON object with the properties:
       case 'Backdrop':
       case 'Drupal':
       case 'Drupal6':
+      case 'Drupal8':
         // Ensure trailing slash
         if (substr($dest, -1) != '/') {
           $dest .= '/';
